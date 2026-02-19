@@ -9,6 +9,6 @@ Change the package-folder (template_repo) to the same name
 ## Create conda environment
 - Have miniconda installed as your environment manager
 - Create new environment: conda create -n <env_name> python=3.13
-- Acticate environment: conda activate <env_name>
+- Activate environment: conda activate <env_name>
 - Deactivate: conda deactivate
 - Download all packages defined by pyproject.toml: pip install -e.

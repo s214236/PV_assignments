@@ -7,7 +7,8 @@ name = "pv_assignments"
 version = "0.1.0"
 description = "pv_assignments"
 authors = [
-  { name = "Peter Mads Pedersen", email = "petermads123@hotmail.com" }
+  { name = "Peter Mads Pedersen", email = "petermads123@hotmail.com" },
+  { name = "Mathilde Rasksen", email = "msrasksen@gmail.com" }
 ]
 readme = "README.md"
 requires-python = ">=3.13"
