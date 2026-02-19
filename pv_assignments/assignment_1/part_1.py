@@ -1,18 +1,9 @@
+"""Task 1 of assignment 1."""
+
 import matplotlib.pyplot as plt
 import pandas as pd
 
-
-def load_data(am: float | int, water_vapor: int | None = None) -> pd.DataFrame:
-    file_name = f"Spectrum_AM{int(am)}"
-    if am != int(am):
-        file_name += f"_{str(am).split('.')[-1]}"
-    if water_vapor is not None:
-        file_name += f"_WP{water_vapor}"
-    folder_path = r"C:\Users\peter\Desktop\OneDrive - Danmarks Tekniske Universitet\Master\4. semester\34552 - Photovoltaic systems\PV - Gruppemappe\Assignment 1"
-    df = pd.read_excel(
-        f"{folder_path}\\{file_name}.xlsx", sheet_name="Spectral irradiance"
-    )
-    return df
+from pv_assignments.assignment_1.data.part_1_loader import load_data
 
 
 def plot(
@@ -65,12 +56,13 @@ def peak_wavelength(dfs: list[pd.DataFrame], labels: list[str]) -> list[float]:
     return [peak[0] for peak in peak_irr.values()]
 
 
-if __name__ == "__main__":
-    print("Part 1-1")
-    df_1_5 = load_data(1.5)
-    df_3 = load_data(3)
-    df_4_5 = load_data(4.5)
-    df_6 = load_data(6)
+def main() -> None:
+    """Main function for part 1 of the assignment."""
+    print("\nPart 1-1")
+    df_1_5 = load_data("1.5")
+    df_3 = load_data("3")
+    df_4_5 = load_data("4.5")
+    df_6 = load_data("6")
     dfs = [df_1_5, df_3, df_4_5, df_6]
     labels = ["AM 1.5", "AM 3", "AM 4.5", "AM 6"]
     value_names = ["Global to perpendicular plane (W/m2/nm)"]
@@ -79,6 +71,10 @@ if __name__ == "__main__":
     plot(dfs, labels, value_names, peak_wavelengths=peak_wavelengths)
 
     print("\nPart 1-2")
-    df_1_5 = load_data(1.5)
+    df_1_5 = load_data("1.5")
     dfs = [df_1_5]
     labels = ["Global", "Direct", "Diffuse"]
+
+
+if __name__ == "__main__":
+    main()
