@@ -21,9 +21,10 @@ def load_data(
     Returns:
         pd.DataFrame: The loaded data as a pandas DataFrame.
     """
-    file_name = f"Spectrum_AM{int(am)}"
-    if am != int(am):
-        file_name += f"_{str(am).split('.')[-1]}"
+    # Create the file name based on the provided parameters
+    file_name = f"Spectrum_AM{am[0]}"
+    if len(am) > 1:
+        file_name += f"_{am.split('.')[-1]}"
     if water_vapor is not None:
         file_name += f"_WP{water_vapor}"
 
