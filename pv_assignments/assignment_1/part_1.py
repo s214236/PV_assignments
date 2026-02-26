@@ -1,14 +1,11 @@
 """Task 1 of assignment 1."""
 
+from importlib import resources
 import matplotlib.pyplot as plt
 import pandas as pd
+import numpy as np
 
 from pv_assignments.assignment_1.data.part_1_loader import load_data
-
-
-import numpy as np
-import matplotlib.pyplot as plt
-import pandas as pd
 
 def _economist_style(ax: plt.Axes) -> None:
     """Apply an Economist-like style to an axes."""
@@ -41,11 +38,17 @@ PV_colors = {
     "text": "#222222",
 }
 
+def _figure_path(fig_title: str) -> str:
+    # This points to pv_assignments/assignment_1/figures/
+    p = resources.files("pv_assignments.assignment_1.figures").joinpath(f"{fig_title}.png")
+    return str(p)
+
 def plot(
     dfs: list[pd.DataFrame],
     labels: list[str],
     value_names: list[str],
     peak_wavelengths: bool = False,
+    fig_title: str | None = None,
 ) -> None:
     """Plot spectral irradiance for multiple dataframes.
 
@@ -56,6 +59,7 @@ def plot(
         peak_wavelengths (bool, optional): Whether to mark peak wavelengths with vertical lines.
             Defaults to False.
     """
+
     # Golden ratio
     phi = (1 + np.sqrt(5)) / 2
     fig_width = 12
@@ -90,10 +94,11 @@ def plot(
                 )
 
     # Labels & title 
+    title = "Spectral irradiance for different air masses"
     ax.set_xlabel("Wavelength (nm)", fontsize=12, labelpad=10)
     ax.set_ylabel("Global to perpendicular plane (W/m²/nm)", fontsize=12, labelpad=10)
     ax.set_title(
-        "Spectral irradiance for different air masses",
+        title,
         loc="left",
         fontsize=14,
         fontweight="bold",
@@ -115,8 +120,17 @@ def plot(
     )
 
     fig.tight_layout()
-    plt.show()
 
+    # --- save ---
+    if fig_title is None:
+        fig_title = title
+
+    save_path = _figure_path(fig_title)
+    fig.savefig(save_path, dpi=300, bbox_inches="tight")
+    plt.close(fig)
+    print("Saved figure:", save_path)
+
+# Not used
 def plot_peter(
     dfs: list[pd.DataFrame],
     labels: list[str],
@@ -228,7 +242,7 @@ def main() -> None:
     value_names = ["Global to perpendicular plane  (W/m2/nm)"]
     broadband_irradiance(dfs, labels, value_names)
     peak_wavelength(dfs, labels, value_names)
-    plot(dfs, labels, value_names, peak_wavelengths=True)
+    plot(dfs, labels, value_names, peak_wavelengths=True, fig_title="Part 1-1")
 
     print("\nPart 1-2")
     dfs = [load_data("1.5")]
@@ -238,7 +252,7 @@ def main() -> None:
         "Diffuse to horizontal plane (W/m2/nm)",
         "Global to horizontal plane  (W/m2/nm)",
     ]
-    plot(dfs=dfs, labels=labels, value_names=value_names)
+    plot(dfs=dfs, labels=labels, value_names=value_names, fig_title="Part 1-2")
     broadband = broadband_irradiance(dfs, labels, value_names)
     diffuse_fraction = (
         broadband["AM 1.5 - Diffuse to horizontal plane (W/m2/nm)"]
@@ -260,7 +274,7 @@ def main() -> None:
         "AM 1.5 - Water Vapor 2.13",
     ]
     value_names = ["Global to perpendicular plane  (W/m2/nm)"]
-    plot(dfs=dfs, labels=labels, value_names=value_names)
+    plot(dfs=dfs, labels=labels, value_names=value_names, fig_title="Part 1-3")
 
 
 if __name__ == "__main__":
