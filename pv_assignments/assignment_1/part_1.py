@@ -62,7 +62,7 @@ def plot(
 
     # Golden ratio
     phi = (1 + np.sqrt(5)) / 2
-    fig_width = 12
+    fig_width = 7
     fig, ax = plt.subplots(figsize=(fig_width, fig_width / phi))
 
     palette = PV_colors["lines"]
@@ -93,31 +93,37 @@ def plot(
                     linewidth=1.2,
                 )
 
-    # Labels & title 
+    # Labels & title
     title = "Spectral irradiance for different air masses"
     ax.set_xlabel("Wavelength (nm)", fontsize=12, labelpad=10)
     ax.set_ylabel("Global to perpendicular plane (W/m²/nm)", fontsize=12, labelpad=10)
-    ax.set_title(
+
+    # Put title in the *figure* header (not in axes)
+    fig.suptitle(
         title,
-        loc="left",
+        x=0.11, y=0.98,  # left-ish, high up
+        ha="left",
         fontsize=14,
         fontweight="bold",
-        pad=18,
     )
 
-    # Apply style
     _economist_style(ax)
 
-    # Legend above plot
-    ax.legend(
+    # Legend also in *figure* header (not axes)
+    handles, legend_labels = ax.get_legend_handles_labels()
+    fig.legend(
+        handles, legend_labels,
         frameon=False,
-        loc="upper left",
-        bbox_to_anchor=(0, 1.18),
-        ncol=2,          # adjust if you have many lines
+        loc="upper right",
+        bbox_to_anchor=(0.98, 0.93),
+        ncol=1,
         fontsize=10,
         handlelength=2.5,
         columnspacing=1.2,
     )
+
+    # Reserve top space for title + legend
+    fig.tight_layout(rect=[0, 0, 1, 0.78])
 
     fig.tight_layout()
 
