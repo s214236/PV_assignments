@@ -6,7 +6,118 @@ import pandas as pd
 from pv_assignments.assignment_1.data.part_1_loader import load_data
 
 
+import numpy as np
+import matplotlib.pyplot as plt
+import pandas as pd
+
+def _economist_style(ax: plt.Axes) -> None:
+    """Apply an Economist-like style to an axes."""
+    # Subtle horizontal grid only
+    ax.grid(axis="y", linestyle=":", alpha=0.5)
+    ax.grid(axis="x", visible=False)
+
+    # Clean spines
+    ax.spines["top"].set_visible(False)
+    ax.spines["right"].set_visible(False)
+
+    # Slightly soften remaining spines
+    ax.spines["left"].set_alpha(0.8)
+    ax.spines["bottom"].set_alpha(0.8)
+
+    # Ticks
+    ax.tick_params(axis="both", which="major", labelsize=10)
+
+PV_colors = {
+    "lines": [
+        "#0B1F3B",  # deep navy (anchor)
+        "#E69F00",  # solar orange
+        "#56B4E9",  # sky blue
+        "#009E73",  # teal/green
+        "#D55E00",  # heat / vermillion
+        "#F0C66D",  # amber highlight
+        "#4E5A61",  # slate grey (extra)
+    ],
+    "grid": "#B7B7B7",
+    "text": "#222222",
+}
+
 def plot(
+    dfs: list[pd.DataFrame],
+    labels: list[str],
+    value_names: list[str],
+    peak_wavelengths: bool = False,
+) -> None:
+    """Plot spectral irradiance for multiple dataframes.
+
+    Args:
+        dfs (list[pd.DataFrame]): DataFrames containing the spectral irradiance data.
+        labels (list[str]): Labels for each DataFrame.
+        value_names (list[str]): Names of the columns to plot.
+        peak_wavelengths (bool, optional): Whether to mark peak wavelengths with vertical lines.
+            Defaults to False.
+    """
+    # Golden ratio
+    phi = (1 + np.sqrt(5)) / 2
+    fig_width = 12
+    fig, ax = plt.subplots(figsize=(fig_width, fig_width / phi))
+
+    palette = PV_colors["lines"]
+    i = 0
+
+    # Plot series
+    for df, label in zip(dfs, labels, strict=True):
+        x = df["Wavelength (nm)"].to_numpy()
+        for value_name in value_names:
+            series_label = f"{label} - {value_name}"
+            y = df[value_name].to_numpy()
+
+            ax.plot(
+                x, y,
+                color = palette[i % len(palette)],
+                linewidth=2.0,
+                label=series_label,
+            )
+            i+=1
+
+            if peak_wavelengths:
+                peak = peak_wavelength([df], [label], [value_name], silent=True)[series_label]
+                ax.axvline(
+                    x=peak["wavelength"],
+                    color="black",
+                    linestyle="--",
+                    alpha=0.5,
+                    linewidth=1.2,
+                )
+
+    # Labels & title 
+    ax.set_xlabel("Wavelength (nm)", fontsize=12, labelpad=10)
+    ax.set_ylabel("Global to perpendicular plane (W/m²/nm)", fontsize=12, labelpad=10)
+    ax.set_title(
+        "Spectral irradiance for different air masses",
+        loc="left",
+        fontsize=14,
+        fontweight="bold",
+        pad=18,
+    )
+
+    # Apply style
+    _economist_style(ax)
+
+    # Legend above plot
+    ax.legend(
+        frameon=False,
+        loc="upper left",
+        bbox_to_anchor=(0, 1.18),
+        ncol=2,          # adjust if you have many lines
+        fontsize=10,
+        handlelength=2.5,
+        columnspacing=1.2,
+    )
+
+    fig.tight_layout()
+    plt.show()
+
+def plot_peter(
     dfs: list[pd.DataFrame],
     labels: list[str],
     value_names: list[str],
