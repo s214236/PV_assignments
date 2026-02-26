@@ -48,6 +48,7 @@ def plot(
     labels: list[str],
     value_names: list[str],
     peak_wavelengths: bool = False,
+    title: str | None = None,
     fig_title: str | None = None,
 ) -> None:
     """Plot spectral irradiance for multiple dataframes.
@@ -78,7 +79,7 @@ def plot(
             ax.plot(
                 x, y,
                 color = palette[i % len(palette)],
-                linewidth=2.0,
+                linewidth=1.3,
                 label=series_label,
             )
             i+=1
@@ -94,7 +95,6 @@ def plot(
                 )
 
     # Labels & title
-    title = "Spectral irradiance for different air masses"
     ax.set_xlabel("Wavelength (nm)", fontsize=12, labelpad=10)
     ax.set_ylabel("Global to perpendicular plane (W/m²/nm)", fontsize=12, labelpad=10)
 
@@ -117,14 +117,12 @@ def plot(
         loc="upper right",
         bbox_to_anchor=(0.98, 0.93),
         ncol=1,
-        fontsize=10,
+        fontsize=8,
         handlelength=2.5,
         columnspacing=1.2,
     )
 
     # Reserve top space for title + legend
-    fig.tight_layout(rect=[0, 0, 1, 0.78])
-
     fig.tight_layout()
 
     # --- save ---
@@ -248,7 +246,7 @@ def main() -> None:
     value_names = ["Global to perpendicular plane  (W/m2/nm)"]
     broadband_irradiance(dfs, labels, value_names)
     peak_wavelength(dfs, labels, value_names)
-    plot(dfs, labels, value_names, peak_wavelengths=True, fig_title="Part 1-1")
+    plot(dfs, labels, value_names, peak_wavelengths=True, title="Spectral irradiance for different air masses", fig_title="Part 1-1")
 
     print("\nPart 1-2")
     dfs = [load_data("1.5")]
@@ -258,7 +256,7 @@ def main() -> None:
         "Diffuse to horizontal plane (W/m2/nm)",
         "Global to horizontal plane  (W/m2/nm)",
     ]
-    plot(dfs=dfs, labels=labels, value_names=value_names, fig_title="Part 1-2")
+    plot(dfs=dfs, labels=labels, value_names=value_names, title="Spectral irradiance - Horizontal plane", fig_title="Part 1-2")
     broadband = broadband_irradiance(dfs, labels, value_names)
     diffuse_fraction = (
         broadband["AM 1.5 - Diffuse to horizontal plane (W/m2/nm)"]
@@ -280,7 +278,7 @@ def main() -> None:
         "AM 1.5 - Water Vapor 2.13",
     ]
     value_names = ["Global to perpendicular plane  (W/m2/nm)"]
-    plot(dfs=dfs, labels=labels, value_names=value_names, fig_title="Part 1-3")
+    plot(dfs=dfs, labels=labels, value_names=value_names, title="Spectral irradiance for different water vapor contents", fig_title="Part 1-3")
 
 
 if __name__ == "__main__":
