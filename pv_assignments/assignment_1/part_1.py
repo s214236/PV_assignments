@@ -21,7 +21,7 @@ def plot(
         peak_wavelengths (bool, optional): Whether to mark peak wavelengths with vertical lines.
             Defaults to False.
     """
-    plt.figure()
+    plt.figure(figsize=(10, 6))
     for df, label in zip(dfs, labels, strict=True):
         for value_name in value_names:
             new_label = f"{label} - {value_name}"
@@ -107,11 +107,12 @@ def peak_wavelength(
 def main() -> None:
     """Main function for part 1 of the assignment."""
     print("\nPart 1-1")
-    df_1_5 = load_data("1.5")
-    df_3 = load_data("3")
-    df_4_5 = load_data("4.5")
-    df_6 = load_data("6")
-    dfs = [df_1_5, df_3, df_4_5, df_6]
+    dfs = [
+        load_data("1.5"),
+        load_data("3"),
+        load_data("4.5"),
+        load_data("6"),
+    ]
     labels = ["AM 1.5", "AM 3", "AM 4.5", "AM 6"]
     value_names = ["Global to perpendicular plane  (W/m2/nm)"]
     broadband_irradiance(dfs, labels, value_names)
@@ -119,8 +120,7 @@ def main() -> None:
     plot(dfs, labels, value_names, peak_wavelengths=True)
 
     print("\nPart 1-2")
-    df_1_5 = load_data("1.5")
-    dfs = [df_1_5]
+    dfs = [load_data("1.5")]
     labels = ["AM 1.5"]
     value_names = [
         "Direct to horizontal plane (W/m2/nm)",
@@ -136,7 +136,20 @@ def main() -> None:
     print(f"Diffuse fraction for AM 1.5: {diffuse_fraction:.2f}")
 
     print("\nPart 1-3")
-    # TODO: Implement part 1-3
+    dfs = [
+        load_data("1.5", water_vapor="0"),
+        load_data("1.5", water_vapor="0.71"),
+        load_data("1.5"),
+        load_data("1.5", water_vapor="2.13"),
+    ]
+    labels = [
+        "AM 1.5 - Water Vapor 0.00",
+        "AM 1.5 - Water Vapor 0.71",
+        "AM 1.5 - Water Vapor 1.42",
+        "AM 1.5 - Water Vapor 2.13",
+    ]
+    value_names = ["Global to perpendicular plane  (W/m2/nm)"]
+    plot(dfs=dfs, labels=labels, value_names=value_names)
 
 
 if __name__ == "__main__":
