@@ -262,6 +262,19 @@ def main() -> None:
         f"    West Tilted: {panel_west_tilted.calculate_diffuse_fraction(df['DHI'], df['DNI'], df['Azimuth'], df['Zenith']).mean()}"  # type: ignore
     )
 
+    print("\nPart 2-3")
+    print("\nPart 2-4")
+    print("  Yearly transposition factor:")
+    print(
+        f"    South: {df_monthly_insolation['Insolation_south'].sum() / df_monthly_insolation['Insolation_horizontal'].sum()}"  # type: ignore
+    )
+    print(
+        f"    South Tilted: {df_monthly_insolation['Insolation_south_tilted'].sum() / df_monthly_insolation['Insolation_horizontal'].sum()}"  # type: ignore
+    )
+    print(
+        f"    West Tilted: {df_monthly_insolation['Insolation_west_tilted'].sum() / df_monthly_insolation['Insolation_horizontal'].sum()}"  # type: ignore
+    )
+
 
 if __name__ == "__main__":
     main()
