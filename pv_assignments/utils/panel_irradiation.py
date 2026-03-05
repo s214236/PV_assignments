@@ -110,6 +110,7 @@ class Panel:
             azimuth_sun=df["Azimuth"],
             zenith_sun=df["Zenith"],
         )
+        df["GPOA"] = df["GPOA"].fillna(0)  # Replace NaN values with 0
         df_daily = df.resample("D", on="DateTime").mean().reset_index()
         df_daily["Insolation"] = df_daily["GPOA"] * 24  # Assuming 24 hours per day
         return df_daily[["DateTime", "Insolation"]]
