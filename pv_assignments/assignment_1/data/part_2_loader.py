@@ -18,5 +18,7 @@ def load_data() -> pd.DataFrame:
         .open("rb") as f
     ):
         df = pd.read_csv(f)
+        df.columns = ["DateTime"] + df.columns[1:].tolist()
+        df["DateTime"] = pd.to_datetime(df["DateTime"])
 
     return df
