@@ -99,10 +99,16 @@ def main() -> None:
     plt.show()
 
     print("  Annual insolation values:")
-    print(f"    Horizontal: {df_monthly_insolation['Insolation_horizontal'].sum()}")
-    print(f"    South: {df_monthly_insolation['Insolation_south'].sum()}")
-    print(f"    South Tilted: {df_monthly_insolation['Insolation_south_tilted'].sum()}")
-    print(f"    West Tilted: {df_monthly_insolation['Insolation_west_tilted'].sum()}")
+    print(
+        f"    Horizontal: {df_monthly_insolation['Insolation_horizontal'].mean() * 365}"
+    )
+    print(f"    South: {df_monthly_insolation['Insolation_south'].mean() * 365}")
+    print(
+        f"    South Tilted: {df_monthly_insolation['Insolation_south_tilted'].mean() * 365}"
+    )
+    print(
+        f"    West Tilted: {df_monthly_insolation['Insolation_west_tilted'].mean() * 365}"
+    )
 
     print("  Diffuse fraction values:")
     print(
